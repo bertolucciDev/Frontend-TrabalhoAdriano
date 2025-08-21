@@ -5,7 +5,7 @@ export default function Dashboard() {
   return (
     <div className="flex">
       <Sidebar
-        items={[{ icon: <Home size={18} />, label: "Início" }]}
+        items={[{ icon: <Home size={15} />, label: "Início" }]}
         footer={
           <button className="flex items-center gap-2 text-sm text-gray-600 hover:text-black">
             <UserCog size={16} />,
