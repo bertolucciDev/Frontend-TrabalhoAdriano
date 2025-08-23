@@ -8,8 +8,7 @@ export default function Dashboard() {
         items={[{ icon: <Home size={15} />, label: "Início" }]}
         footer={
           <button className="flex items-center gap-2 text-sm text-gray-600 hover:text-black">
-            <UserCog size={16} />,
-            Configurações do Usuario
+            <UserCog size={16} />, Configurações do Usuario
           </button>
         }
       ></Sidebar>
