@@ -13,36 +13,35 @@ export default function Register() {
   const [acceptTerms, setAcceptTerms] = useState(false);
   const [showPassword, setShowPassword] = useState(false);
   const [showConfirmPassword, setShowConfirmPassword] = useState(false);
+  const [errors, setErrors] = useState<{
+    email?: string;
+    password?: string;
+    confirmPassword?: string;
+  }>({});
   const navigate = useNavigate();
-
-  {
-    /* Verifica que se o usuario colocou algum caracter no primeiro campo de senha */
-  }
-  const isConfirmDisbled = password.length === 0;
 
   const handleRegister = (e: React.FormEvent) => {
     e.preventDefault();
 
-    if (!email || !password || !confirmPassword) {
-      Swal.fire({
-        icon: "error",
-        title: "Campos obrigatórios",
-        text: "Preencha todos os campos!",
-        confirmButtonColor: "#14B8A6",
-      });
-      return;
+    const newErrors: { email?: string; password?: string; confirmPassword?: string } = {};
+
+    // Valida campos obrigatórios
+    if (!email.trim()) newErrors.email = "Campo obrigatório";
+    else if(!/\S+@\S+\.\S+/.test(email)) newErrors.email = "Email inválido";
+    if (!password.trim()) newErrors.password = "Campo obrigatório";
+
+    // Valida confirmação de senha apenas se o campo estiver visível
+    if (password.length > 0) {
+      if (!confirmPassword.trim()) newErrors.confirmPassword = "Campo obrigatório";
+      else if (password !== confirmPassword) newErrors.confirmPassword = "Senhas não conferem";
     }
 
-    if (password !== confirmPassword) {
-      Swal.fire({
-        icon: "error",
-        title: "Senhas não conferem",
-        text: "Digite a mesma senha nos dois campos!",
-        confirmButtonColor: "#14B8A6",
-      });
-      return;
-    }
+    setErrors(newErrors);
 
+    // Se houver erros de preenchimento, não continuar
+    if (Object.keys(newErrors).length > 0) return;
+
+    // Valida aceitação dos termos
     if (!acceptTerms) {
       Swal.fire({
         icon: "warning",
@@ -53,6 +52,7 @@ export default function Register() {
       return;
     }
 
+    // Sucesso
     Swal.fire({
       icon: "success",
       title: "Conta criada com sucesso!",
@@ -66,82 +66,82 @@ export default function Register() {
 
   return (
     <div className="flex h-screen">
-      {/* Coluna esquerda com logo */}
       <div className="w-full md:w-1/2 flex items-center justify-center bg-gray-100">
         <Card className="w-full max-w-sm border-none shadow-none bg-gray-100">
           <CardHeader className="flex flex-col items-center">
-            <div className="flex items-center justify-center">
-              <img
-                src="/OrganizationTechLogo.png"
-                alt="OrganizationTech Logo"
-              />
-            </div>
+            <img src="/OrganizationTechLogo.png" alt="OrganizationTech Logo" />
           </CardHeader>
 
           <form onSubmit={handleRegister}>
-            <CardContent className="space-y-4">
+            <CardContent className="space-y-3">
               {/* Email */}
-              <div className="relative flex items-center">
-                <span className="absolute left-3 text-gray-500">
-                  <User size={18} />
-                </span>
-                <Input
-                  type="email"
-                  placeholder="Insira seu email"
-                  onChange={(e) => setEmail(e.target.value)}
-                  className="pl-10 h-12 text-base"
-                />
+              <div className="relative flex flex-col">
+                <div className="relative flex items-center">
+                  <span className="absolute left-3 text-gray-500">
+                    <User size={18} />
+                  </span>
+                  <Input
+                    type="email"
+                    placeholder="Insira seu email"
+                    value={email}
+                    onChange={(e) => setEmail(e.target.value)}
+                    className={`pl-10 h-12 text-base ${errors.email ? "border-red-500" : ""}`}
+                  />
+                </div>
+                {errors.email && <span className="text-red-500 text-sm mt-1">{errors.email}</span>}
               </div>
 
               {/* Senha */}
-              <div className="relative flex items-center">
-                <span className="absolute left-3 text-gray-500">
-                  <Lock size={18} />
-                </span>
-                <Input
-                  type={showPassword ? "text" : "password"}
-                  placeholder="Insira sua senha"
-                  onChange={(e) => setPassword(e.target.value)}
-                  className="pl-10 h-12 text-base"
-                />
-                <button
-                  type="button"
-                  onClick={() => setShowPassword(!showPassword)}
-                  className="absolute right-3 text-gray-500"
-                >
-                  {showPassword ? <EyeOff size={18} /> : <Eye size={18} />}
-                </button>
-              </div>
-
-              {/* Confirmação de senha */}
-              <div className="relative flex items-center">
-                <span className="absolute left-3 text-gray-500">
-                  <Lock size={18} />
-                </span>
-                <Input
-                  type={showConfirmPassword ? "text" : "password"}
-                  placeholder="Confirme sua senha"
-                  onChange={(e) => setConfirmPassword(e.target.value)}
-                  className={`pl-10 h-12 text-base ${
-                    isConfirmDisbled ? "opacity-50 cursor-not-allowed" : ""
-                  }`}
-                  disabled={isConfirmDisbled}
-                />
-                {isConfirmDisbled === false && (
+              <div className="relative flex flex-col">
+                <div className="relative flex items-center">
+                  <span className="absolute left-3 text-gray-500">
+                    <Lock size={18} />
+                  </span>
+                  <Input
+                    type={showPassword ? "text" : "password"}
+                    placeholder="Insira sua senha"
+                    value={password}
+                    onChange={(e) => setPassword(e.target.value)}
+                    className={`pl-10 h-12 text-base ${errors.password ? "border-red-500" : ""}`}
+                  />
                   <button
                     type="button"
-                    onClick={() => setShowConfirmPassword(!showConfirmPassword)}
+                    onClick={() => setShowPassword(!showPassword)}
                     className="absolute right-3 text-gray-500"
-                    disabled={isConfirmDisbled}
                   >
-                    {showConfirmPassword ? (
-                      <EyeOff size={18} />
-                    ) : (
-                      <Eye size={18} />
-                    )}
+                    {showPassword ? <EyeOff size={18} /> : <Eye size={18} />}
                   </button>
-                )}
+                </div>
+                {errors.password && <span className="text-red-500 text-sm mt-1">{errors.password}</span>}
               </div>
+
+              {/* Confirmação de senha - só aparece se houver algum caracter em senha */}
+              {password.length > 0 && (
+                <div className="relative flex flex-col">
+                  <div className="relative flex items-center">
+                    <span className="absolute left-3 text-gray-500">
+                      <Lock size={18} />
+                    </span>
+                    <Input
+                      type={showConfirmPassword ? "text" : "password"}
+                      placeholder="Confirme sua senha"
+                      value={confirmPassword}
+                      onChange={(e) => setConfirmPassword(e.target.value)}
+                      className={`pl-10 h-12 text-base ${errors.confirmPassword ? "border-red-500" : ""}`}
+                    />
+                    <button
+                      type="button"
+                      onClick={() => setShowConfirmPassword(!showConfirmPassword)}
+                      className="absolute right-3 text-gray-500"
+                    >
+                      {showConfirmPassword ? <EyeOff size={18} /> : <Eye size={18} />}
+                    </button>
+                  </div>
+                  {errors.confirmPassword && (
+                    <span className="text-red-500 text-sm mt-1">{errors.confirmPassword}</span>
+                  )}
+                </div>
+              )}
 
               {/* Checkbox aceitar termos */}
               <div className="flex items-center gap-2">
@@ -150,16 +150,11 @@ export default function Register() {
                   checked={acceptTerms}
                   onChange={() => setAcceptTerms(!acceptTerms)}
                 />
-                <label className="text-sm text-gray-700">
-                  Aceito todos os termos
-                </label>
+                <label className="text-sm text-gray-700">Aceito todos os termos</label>
               </div>
 
               {/* Botão registrar */}
-              <Button
-                type="submit"
-                className="w-full h-12 text-lg bg-teal-500 hover:bg-teal-600 text-white"
-              >
+              <Button type="submit" className="w-full h-12 text-lg bg-teal-500 hover:bg-teal-600 text-white">
                 Registrar
               </Button>
 
@@ -181,8 +176,7 @@ export default function Register() {
       <div
         className="w-full bg-gradient-to-b hidden md:block"
         style={{
-          background:
-            "linear-gradient(to bottom, rgba(18,48,115,0.772), #2563eb)",
+          background: "linear-gradient(to bottom, rgba(18,48,115,0.772), #2563eb)",
         }}
       />
     </div>
