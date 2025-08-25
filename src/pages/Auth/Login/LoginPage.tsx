@@ -28,7 +28,7 @@ export default function Login() {
     if (Object.keys(newErrors).length > 0) return;
 
     Swal.fire({
-      icon: "success",
+      icon: 'success',
       title: "Login realizado com sucesso!",
       text: "Redirecionando!",
       showConfirmButton: false,
