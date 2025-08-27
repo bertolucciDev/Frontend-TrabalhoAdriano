@@ -4,10 +4,13 @@ import { Input } from "@/components/ui/input";
 import { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import { User, Lock, Eye, EyeOff } from "lucide-react";
-import Swal from "sweetalert2";
+import { useAlertWarning } from "@/hooks/use-warning";
+import { useAlertSuccess } from "@/hooks/use-success";
 
 export default function Register() {
   const navigate = useNavigate();
+  const { alertWarningTerms } = useAlertWarning()
+  const { alertSuccessLogin } = useAlertSuccess()
 
   // States do formulário
   const [email, setEmail] = useState("");
@@ -54,23 +57,12 @@ export default function Register() {
 
     // Valida aceite dos termos
     if (!acceptTerms) {
-      Swal.fire({
-        icon: "warning",
-        title: "Aceite os termos",
-        text: "Você precisa aceitar os termos de uso para continuar!",
-        confirmButtonColor: "#14B8A6",
-      });
+      alertWarningTerms()
       return;
     }
 
     // Sucesso
-    Swal.fire({
-      icon: "success",
-      title: "Conta criada com sucesso!",
-      text: "Redirecionando para login...",
-      showConfirmButton: false,
-      timer: 2000,
-    }).then(() => navigate("/login"));
+    alertSuccessLogin()
   };
 
   return (

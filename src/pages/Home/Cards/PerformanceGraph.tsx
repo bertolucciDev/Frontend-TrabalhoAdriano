@@ -23,21 +23,30 @@ export default function GraphPerformancelCard() {
       <CardHeader>
         <h2 className="text-xl font-bold">Desempenho Mensal</h2>
       </CardHeader>
-      <CardContent>
-        <ResponsiveContainer width="100%" height={200}>
-          <AreaChart data={data}>
-            <defs>
-              <linearGradient id="colorTarefas" x1="0" y1="0" x2="0" y2="1">
-                <stop offset="5%" stopColor="#3b82f6" stopOpacity={0.8}/>
-                <stop offset="95%" stopColor="#3b82f6" stopOpacity={0}/>
-              </linearGradient>
-            </defs>
-            <XAxis dataKey="mes" />
-            <YAxis />
-            <Tooltip />
-            <Area type="monotone" dataKey="tarefas" stroke="#3b82f6" fillOpacity={1} fill="url(#colorTarefas)" />
-          </AreaChart>
-        </ResponsiveContainer>
+      <CardContent className="p-2 sm:p-4">
+        {/* Responsividade: altura ajusta em diferentes telas */}
+        <div className="w-full h-64 sm:h-80 md:h-96">
+          <ResponsiveContainer width="100%" height="100%">
+            <AreaChart data={data}>
+              <defs>
+                <linearGradient id="colorTarefas" x1="0" y1="0" x2="0" y2="1">
+                  <stop offset="5%" stopColor="#3b82f6" stopOpacity={0.8} />
+                  <stop offset="95%" stopColor="#3b82f6" stopOpacity={0} />
+                </linearGradient>
+              </defs>
+              <XAxis dataKey="mes" />
+              <YAxis />
+              <Tooltip />
+              <Area
+                type="monotone"
+                dataKey="tarefas"
+                stroke="#3b82f6"
+                fillOpacity={1}
+                fill="url(#colorTarefas)"
+              />
+            </AreaChart>
+          </ResponsiveContainer>
+        </div>
       </CardContent>
     </Card>
   );
