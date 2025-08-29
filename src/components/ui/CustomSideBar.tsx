@@ -1,6 +1,6 @@
 import { Button } from "@/components/ui/button";
 import { cn } from "@/lib/utils";
-import { BarChart2, CheckSquare, Home, LogOut, Menu } from "lucide-react";
+import { BarChart2, CheckSquare, Home, LogOut, Menu, X } from "lucide-react";
 import { useState } from "react";
 import { useLogout } from "@/hooks/use-logout";
 
@@ -22,7 +22,7 @@ export default function Sidebar() {
           className="text-white hover:bg-blue-800 h-12 w-12"
           onClick={() => setOpen(!open)}
         >
-          <Menu size={24} />
+          {!open ? <Menu size={24} /> : <X size={24}/>}
         </Button>
         {open && <span className="font-bold text-lg">OrganizationTech</span>}
       </div>

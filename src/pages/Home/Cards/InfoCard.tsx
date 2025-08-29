@@ -3,7 +3,7 @@ import { Card, CardHeader, CardContent } from "@/components/ui/card";
 
 export default function InfoCard({ email, rank, tasksCompleted }: InfoCardProps) {
   return (
-    <Card className="w-full shadow-lg rounded-2xl">
+    <Card className="w-full md:h-52 shadow-lg rounded-2xl">
       <CardHeader>
         <h2 className="text-lg font-bold">Informações do Usuário</h2>
       </CardHeader>

@@ -4,16 +4,20 @@ import { type ProgressCardProps } from "@/@types/Dashboard/Content/Dash.card";
 
 export default function ProgressCard({ ProgressPerf }: ProgressCardProps) {
   return (
-    <Card className="w-full h-full shadow-lg rounded-2xl">
+    <Card className="w-full h-[360px] sm:h-[360px] xs:h-auto flex flex-col shadow-lg rounded-2xl">
       <CardHeader>
-        <h2 className="text-xl sm:text-2xl font-bold">Progresso Geral</h2>
+        <h2 className="text-xl sm:text-2xl font-bold text-center">
+          Progresso Geral
+        </h2>
       </CardHeader>
-      <CardContent className="flex flex-col gap-4">
+
+      {/* CardContent centralizado verticalmente */}
+      <CardContent className="flex flex-col justify-center items-center gap-4 h-full">
         <p className="text-gray-700 text-sm sm:text-base">
-          Você concluiu <span className="font-semibold">{ProgressPerf}%</span> das suas metas
+          Você concluiu <span className="font-semibold">{ProgressPerf}%</span>{" "}
+          das suas metas
         </p>
 
-        {/* Barra de progresso responsiva */}
         <div className="w-full">
           <Progress
             value={ProgressPerf}

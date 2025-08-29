@@ -2,40 +2,36 @@ import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
 import { useState } from "react";
-import { useNavigate } from "react-router-dom";
 import { User, Lock, Eye, EyeOff } from "lucide-react";
-import Swal from "sweetalert2";
+import { useAlertSuccess } from "@/hooks/use-success";
+import { useNavigate } from "react-router-dom";
 
 export default function Login() {
+  const navigate = useNavigate()
+  const { alertSuccessLogin } = useAlertSuccess();
+
+  //States
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [showPassword, setShowPassword] = useState(false);
   const [errors, setErrors] = useState<{ email?: string; password?: string }>(
     {}
   );
-  const navigate = useNavigate();
 
   const handleLogin = (e: React.FormEvent) => {
     e.preventDefault();
 
     const newErrors: { email?: string; password?: string } = {};
     if (!email.trim()) newErrors.email = "Campo obrigatório";
-    else if(!/\S+@\S+\.\S+/.test(email)) newErrors.email = "Email inválido";
+    else if (!/\S+@\S+\.\S+/.test(email)) newErrors.email = "Email inválido";
     if (!password.trim()) newErrors.password = "Campo obrigatório";
 
     setErrors(newErrors);
 
     if (Object.keys(newErrors).length > 0) return;
 
-    Swal.fire({
-      icon: 'success',
-      title: "Login realizado com sucesso!",
-      text: "Redirecionando!",
-      showConfirmButton: false,
-      timer: 2000,
-    }).then(() => {
-      navigate("/dashboard");
-    });
+    //Sucesso
+    alertSuccessLogin();
   };
 
   return (

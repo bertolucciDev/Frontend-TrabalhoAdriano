@@ -17,7 +17,7 @@ const data = [
   { mes: "Dez", tarefas: 20 },
 ];
 
-export default function GraphPerformancelCard() {
+export default function GraphPerformanceCard() {
   return (
     <Card className="w-full shadow-lg rounded-2xl">
       <CardHeader>
@@ -25,7 +25,7 @@ export default function GraphPerformancelCard() {
       </CardHeader>
       <CardContent className="p-2 sm:p-4">
         {/* Responsividade: altura ajusta em diferentes telas */}
-        <div className="w-full h-64 sm:h-80 md:h-96">
+        <div className="w-full h-64 sm:h-80 md:h-55">
           <ResponsiveContainer width="100%" height="100%">
             <AreaChart data={data}>
               <defs>

@@ -6,26 +6,33 @@ import ProgressCard from "./Cards/ProgressBarCard";
 
 export default function Dashboard() {
   return (
-    <div className="flex min-h-screen flex-col lg:flex-row">
+    <div className="flex min-h-screen w-full flex-col lg:flex-row">
       {/* Sidebar desktop */}
-      <Sidebar />
+      <div className="hidden lg:block">
+        <Sidebar />
+      </div>
 
       {/* Navbar mobile */}
-      <CustomNavBarMobile />
+      <div className="block lg:hidden w-full">
+        <CustomNavBarMobile />
+      </div>
 
       {/* Conteúdo principal */}
-      <main className="flex-1 bg-gray-200 p-4 sm:p-6 mb-10 lg:mb-0 transition-all duration-300">
+      <main className="flex-1 bg-gray-200 p-4 sm:p-6 md:p-8 transition-all duration-300">
         {/* InfoCard */}
-        <div className="bg-blue-100 w-full rounded-2xl shadow p-6 mb-6">
+        <div className="bg-blue-900 w-full rounded-2xl shadow p-6 mb-8">
           <InfoCard email="luis@gmail.com" rank="Ouro" tasksCompleted={25} />
         </div>
 
         {/* Grid responsivo para gráficos e progresso */}
-        <div className="flex flex-col lg:flex-row gap-6 mb-6">
-          <div className="bg-blue-100 rounded-2xl shadow p-6 flex-1">
+        <div className="flex flex-col lg:flex-row mb-14 gap-6">
+          {/* GraphPerformancelCard */}
+          <div className="bg-blue-900 rounded-2xl shadow p-6 flex-1">
             <GraphPerformancelCard />
           </div>
-          <div className="bg-blue-100 rounded-2xl shadow p-6 flex-1">
+
+          {/* ProgressCard */}
+          <div className="bg-blue-900 rounded-2xl shadow p-6 flex-1">
             <ProgressCard ProgressPerf={66} />
           </div>
         </div>

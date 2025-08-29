@@ -10,7 +10,7 @@ import { useAlertSuccess } from "@/hooks/use-success";
 export default function Register() {
   const navigate = useNavigate();
   const { alertWarningTerms } = useAlertWarning()
-  const { alertSuccessLogin } = useAlertSuccess()
+  const { alertSuccessRegister } = useAlertSuccess()
 
   // States do formulário
   const [email, setEmail] = useState("");
@@ -62,7 +62,7 @@ export default function Register() {
     }
 
     // Sucesso
-    alertSuccessLogin()
+    alertSuccessRegister()
   };
 
   return (

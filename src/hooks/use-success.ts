@@ -3,9 +3,9 @@ import Swal from "sweetalert2";
 import { useNavigate } from "react-router-dom";
 
 export function useAlertSuccess() {
-  function alertSuccessLogin() {
-    const navigate = useNavigate()
-
+  const navigate = useNavigate()
+  
+  function alertSuccessRegister() {
     Swal.fire({
       icon: "success",
       title: "Conta criada com sucesso!",
@@ -15,5 +15,17 @@ export function useAlertSuccess() {
     }).then(() => navigate("/login"));
   }
 
-  return{alertSuccessLogin}
+  function alertSuccessLogin() {
+    Swal.fire({
+      icon: "success",
+      title: "Login realizado com sucesso!",
+      text: "Redirecionando!",
+      showConfirmButton: false,
+      timer: 2000,
+    }).then(() => {
+      navigate("/dashboard");
+    });
+  }
+
+  return { alertSuccessRegister, alertSuccessLogin};
 }
