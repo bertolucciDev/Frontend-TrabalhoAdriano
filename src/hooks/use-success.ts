@@ -4,7 +4,7 @@ import { useNavigate } from "react-router-dom";
 
 export function useAlertSuccess() {
   const navigate = useNavigate()
-  
+
   function alertSuccessRegister() {
     Swal.fire({
       icon: "success",

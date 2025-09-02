@@ -15,13 +15,11 @@ export function useLogout() {
       cancelButtonColor: "#d33",
       confirmButtonText: "Sim, sair",
       cancelButtonText: "Cancelar",
-    }).then((result) => {
-      if (result.isConfirmed) {
-        // localStorage.removeItem("token");
-        navigate("/login");
-      }
+    }).then(() => {
+      // localStorage.removeItem("token");
+      navigate("/login");
     });
   };
 
-  return(handleLogout)
+  return handleLogout;
 }

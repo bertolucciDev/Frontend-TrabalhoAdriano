@@ -2,7 +2,7 @@ import Dashboard from '@/pages/Home/DashboarPage';
 import LandingPage from '@/pages/Auth/Ladingpage/LandingPage';
 import Login from '@/pages/Auth/Login/LoginPage';
 import RecoverPassword from '@/pages/Auth/PasswordReset/RecoverPassword';
-import Register from '@/pages/Auth/Registro/RegisterPage';
+import Register from '@/pages/Auth/Register/RegisterPage';
 import {BrowserRouter, Routes, Route} from 'react-router-dom';
 
 export function AppRoutes() {
