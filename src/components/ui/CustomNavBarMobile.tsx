@@ -2,7 +2,7 @@
 import { useState } from "react";
 import { Button } from "@/components/ui/button";
 import { Home, CheckSquare, BarChart2, LogOut, Menu } from "lucide-react";
-import { useLogout } from "@/hooks/use-logout";
+import { useLogout } from "@/hooks/useLogout";
 
 export default function CustomNavBarMobile() {
   const [open, setOpen] = useState(false); // menu colapsável
@@ -20,11 +20,7 @@ export default function CustomNavBarMobile() {
           <Menu size={28} />
         </Button>
         <span className="font-bold text-lg">OrganizationTech</span>
-        <Button
-          variant="ghost"
-          onClick={handleLogout}
-          className="text-red-400"
-        >
+        <Button variant="ghost" onClick={handleLogout} className="text-red-400">
           <LogOut size={28} />
         </Button>
       </div>
@@ -32,13 +28,22 @@ export default function CustomNavBarMobile() {
       {/* Menu expandido */}
       {open && (
         <nav className="bg-blue-800 p-4 flex flex-col space-y-2">
-          <Button variant="ghost" className="flex items-center justify-start w-full text-white">
+          <Button
+            variant="ghost"
+            className="flex items-center justify-start w-full text-white"
+          >
             <Home className="mr-2" size={20} /> Início
           </Button>
-          <Button variant="ghost" className="flex items-center justify-start w-full text-white">
+          <Button
+            variant="ghost"
+            className="flex items-center justify-start w-full text-white"
+          >
             <CheckSquare className="mr-2" size={20} /> Tarefas
           </Button>
-          <Button variant="ghost" className="flex items-center justify-start w-full text-white">
+          <Button
+            variant="ghost"
+            className="flex items-center justify-start w-full text-white"
+          >
             <BarChart2 className="mr-2" size={20} /> Relatórios
           </Button>
         </nav>

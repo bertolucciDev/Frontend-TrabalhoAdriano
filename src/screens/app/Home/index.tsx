@@ -1,8 +1,8 @@
 import Sidebar from "@/components/ui/CustomSideBar";
 import CustomNavBarMobile from "@/components/ui/CustomNavBarMobile";
-import InfoCard from "./Cards/InfoCard";
-import GraphPerformancelCard from "./Cards/PerformanceGraph";
-import ProgressCard from "./Cards/ProgressBarCard";
+import InfoCard from "./Cards/Info";
+import GraphPerformancelCard from "./Cards/Performance";
+import ProgressCard from "./Cards/Progress";
 
 export default function Dashboard() {
   return (

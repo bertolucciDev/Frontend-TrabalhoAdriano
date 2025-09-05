@@ -2,10 +2,10 @@ import { Button } from "@/components/ui/button";
 import { cn } from "@/lib/utils";
 import { BarChart2, CheckSquare, Home, LogOut, Menu, X } from "lucide-react";
 import { useState } from "react";
-import { useLogout } from "@/hooks/use-logout";
+import { useLogout } from "@/hooks/useLogout";
 
 export default function Sidebar() {
-  const [open, setOpen] = useState(false); 
+  const [open, setOpen] = useState(false);
   const handleLogout = useLogout();
 
   return (
@@ -22,7 +22,7 @@ export default function Sidebar() {
           className="text-white hover:bg-blue-800 h-12 w-12"
           onClick={() => setOpen(!open)}
         >
-          {!open ? <Menu size={24} /> : <X size={24}/>}
+          {!open ? <Menu size={24} /> : <X size={24} />}
         </Button>
         {open && <span className="font-bold text-lg">OrganizationTech</span>}
       </div>
@@ -58,10 +58,15 @@ export default function Sidebar() {
           onClick={handleLogout}
           className={cn(
             "w-full h-12 hover:bg-red-600",
-            open ? "justify-start text-red-400 pl-4" : "justify-center text-red-400"
+            open
+              ? "justify-start text-red-400 pl-4"
+              : "justify-center text-red-400"
           )}
         >
-          <LogOut className={cn(open ? "mr-2" : "", "text-red-400")} size={24} />
+          <LogOut
+            className={cn(open ? "mr-2" : "", "text-red-400")}
+            size={24}
+          />
           {open && "Sair"}
         </Button>
       </div>

@@ -1,6 +1,6 @@
 import { Card, CardHeader, CardContent } from "@/components/ui/card";
 import { Progress } from "@/components/ui/progress";
-import { type ProgressCardProps } from "@/@types/Dashboard/Content/Dash.card";
+import { type ProgressCardProps } from "@/@types/cards";
 
 export default function ProgressCard({ ProgressPerf }: ProgressCardProps) {
   return (

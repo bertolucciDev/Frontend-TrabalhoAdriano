@@ -3,11 +3,11 @@ import { Card, CardContent, CardHeader } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
 import { useState } from "react";
 import { User, Lock, Eye, EyeOff } from "lucide-react";
-import { useAlertSuccess } from "@/hooks/use-success";
+import { useAlertSuccess } from "@/hooks/useSuccess";
 import { useNavigate } from "react-router-dom";
 
 export default function Login() {
-  const navigate = useNavigate()
+  const navigate = useNavigate();
   const { alertSuccessLogin } = useAlertSuccess();
 
   //States

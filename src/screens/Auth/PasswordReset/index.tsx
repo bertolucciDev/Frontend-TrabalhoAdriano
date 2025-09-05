@@ -3,7 +3,7 @@ import { Card, CardContent, CardHeader } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
-import { MailOpen  } from "lucide-react";
+import { MailOpen } from "lucide-react";
 import Swal from "sweetalert2";
 
 export default function RecoverPassword() {
@@ -22,33 +22,14 @@ export default function RecoverPassword() {
     setErrors(newErrors);
     if (Object.keys(newErrors).length > 0) return;
 
-    try {
-      // Aqui chamamos o back-end para enviar o email
-      const response = await fetch("/api/recover-password", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ email }),
-      });
-
-      if (!response.ok) throw new Error("Erro ao enviar email");
-
-      Swal.fire({
-        icon: "success",
-        title: "Email enviado!",
-        text: "Verifique sua caixa de entrada para redefinir sua senha.",
-        confirmButtonColor: "#14B8A6",
-      });
-
-      setEmail(""); // limpa o input
-    } catch (err) {
-      console.log(err)
-      Swal.fire({
-        icon: "error",
-        title: "Falha ao enviar email",
-        text: "Tente novamente mais tarde.",
-        confirmButtonColor: "#14B8A6",
-      });
-    }
+    Swal.fire({
+      icon: "success",
+      title: "Email enviado!",
+      text: "Verifique sua caixa de entrada para redefinir sua senha.",
+      confirmButtonColor: "#14B8A6",
+    }).then(() => {
+      navigate("/step1")
+    })
   };
 
   return (
@@ -57,7 +38,9 @@ export default function RecoverPassword() {
         <Card className="w-full max-w-sm border-none shadow-none bg-gray-100">
           <CardHeader className="flex flex-col items-center">
             <img src="/OrganizationTechLogo.png" alt="OrganizationTech Logo" />
-            <h2 className="mt-4 text-lg text-center font-semibold">Enviaremos um e-mail para recuperar sua senha</h2>
+            <h2 className="mt-4 text-lg text-center font-semibold">
+              Enviaremos um e-mail para recuperar sua senha
+            </h2>
           </CardHeader>
 
           <form onSubmit={handleRecover}>
@@ -79,7 +62,9 @@ export default function RecoverPassword() {
                 </div>
                 <span
                   className={`text-red-500 text-sm mt-1 transition-all duration-300 ease-in-out transform ${
-                    errors.email ? "opacity-100 translate-y-0" : "opacity-0 -translate-y-2"
+                    errors.email
+                      ? "opacity-100 translate-y-0"
+                      : "opacity-0 -translate-y-2"
                   }`}
                 >
                   {errors.email || "Campo oculto"}
@@ -109,7 +94,8 @@ export default function RecoverPassword() {
       <div
         className="w-full bg-gradient-to-b hidden md:block"
         style={{
-          background: "linear-gradient(to bottom, rgba(18,48,115,0.772), #2563eb)",
+          background:
+            "linear-gradient(to bottom, rgba(18,48,115,0.772), #2563eb)",
         }}
       />
     </div>

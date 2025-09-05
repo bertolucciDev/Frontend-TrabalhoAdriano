@@ -1,7 +1,11 @@
-import { type InfoCardProps } from "@/@types/Dashboard/Content/Dash.card";
+import { type InfoCardProps } from "@/@types/cards";
 import { Card, CardHeader, CardContent } from "@/components/ui/card";
 
-export default function InfoCard({ email, rank, tasksCompleted }: InfoCardProps) {
+export default function InfoCard({
+  email,
+  rank,
+  tasksCompleted,
+}: InfoCardProps) {
   return (
     <Card className="w-full md:h-52 shadow-lg rounded-2xl">
       <CardHeader>
@@ -11,8 +15,12 @@ export default function InfoCard({ email, rank, tasksCompleted }: InfoCardProps)
         <div className="flex flex-col sm:flex-row sm:justify-between sm:items-center gap-4">
           {/* Informações */}
           <div className="flex flex-col gap-2">
-            <p className="text-gray-700"><span className="font-semibold">Email:</span> {email}</p>
-            <p className="text-gray-700"><span className="font-semibold">Rank:</span> {rank}</p>
+            <p className="text-gray-700">
+              <span className="font-semibold">Email:</span> {email}
+            </p>
+            <p className="text-gray-700">
+              <span className="font-semibold">Rank:</span> {rank}
+            </p>
           </div>
 
           {/* Tarefas concluídas */}

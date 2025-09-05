@@ -4,13 +4,13 @@ import { Input } from "@/components/ui/input";
 import { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import { User, Lock, Eye, EyeOff } from "lucide-react";
-import { useAlertWarning } from "@/hooks/use-warning";
-import { useAlertSuccess } from "@/hooks/use-success";
+import { useAlertWarning } from "@/hooks/useWarning";
+import { useAlertSuccess } from "@/hooks/useSuccess";
 
 export default function Register() {
   const navigate = useNavigate();
-  const { alertWarningTerms } = useAlertWarning()
-  const { alertSuccessRegister } = useAlertSuccess()
+  const { alertWarningTerms } = useAlertWarning();
+  const { alertSuccessRegister } = useAlertSuccess();
 
   // States do formulário
   const [email, setEmail] = useState("");
@@ -25,9 +25,9 @@ export default function Register() {
     confirmPassword?: string;
   }>({});
 
-  // Limpa campo de confirmação caso senha fique vazia
+  // Limpa campo de confirmação caso senha fique menor que 6 caracteres
   useEffect(() => {
-    if (password === "") {
+    if (password.length < 6) {
       setConfirmPassword("");
       setShowConfirmPassword(false);
     }
@@ -37,19 +37,26 @@ export default function Register() {
   const handleRegister = (e: React.FormEvent) => {
     e.preventDefault();
 
-    const newErrors: { email?: string; password?: string; confirmPassword?: string } = {};
+    const newErrors: {
+      email?: string;
+      password?: string;
+      confirmPassword?: string;
+    } = {};
 
     // Valida email
     if (!email.trim()) newErrors.email = "Campo obrigatório";
     else if (!/\S+@\S+\.\S+/.test(email)) newErrors.email = "Email inválido";
 
-    // Valida senha
+    // Validação da senha
     if (!password.trim()) newErrors.password = "Campo obrigatório";
+    else if (password.length < 6)
+      newErrors.password = "A senha deve ter pelo menos 6 caracteres";
 
-    // Valida confirmação apenas se o campo estiver visível
-    if (password.length > 0) {
+    // Validação da confirmação somente se senha tiver >= 6 caracteres
+    if (password.length >= 6) {
       if (!confirmPassword.trim()) newErrors.confirmPassword = "Campo obrigatório";
-      else if (password !== confirmPassword) newErrors.confirmPassword = "Senhas não conferem";
+      else if (password !== confirmPassword)
+        newErrors.confirmPassword = "Senhas não conferem";
     }
 
     setErrors(newErrors);
@@ -57,12 +64,12 @@ export default function Register() {
 
     // Valida aceite dos termos
     if (!acceptTerms) {
-      alertWarningTerms()
+      alertWarningTerms();
       return;
     }
 
     // Sucesso
-    alertSuccessRegister()
+    alertSuccessRegister();
   };
 
   return (
@@ -87,10 +94,14 @@ export default function Register() {
                     placeholder="Insira seu email"
                     value={email}
                     onChange={(e) => setEmail(e.target.value)}
-                    className={`pl-10 h-12 text-base ${errors.email ? "border-red-500" : ""}`}
+                    className={`pl-10 h-12 text-base ${
+                      errors.email ? "border-red-500" : ""
+                    }`}
                   />
                 </div>
-                {errors.email && <span className="text-red-500 text-sm mt-1">{errors.email}</span>}
+                {errors.email && (
+                  <span className="text-red-500 text-sm mt-1">{errors.email}</span>
+                )}
               </div>
 
               {/* Campo Senha */}
@@ -104,7 +115,9 @@ export default function Register() {
                     placeholder="Insira sua senha"
                     value={password}
                     onChange={(e) => setPassword(e.target.value)}
-                    className={`pl-10 h-12 text-base ${errors.password ? "border-red-500" : ""}`}
+                    className={`pl-10 h-12 text-base ${
+                      errors.password ? "border-red-500" : ""
+                    }`}
                   />
                   <button
                     type="button"
@@ -122,7 +135,7 @@ export default function Register() {
               {/* Campo Confirmação de Senha com animação */}
               <div
                 className={`relative flex flex-col transition-all duration-300 ease-in-out mt-2 ${
-                  password.length > 0
+                  password.length >= 6
                     ? "max-h-40 opacity-100"
                     : "max-h-0 opacity-0 pointer-events-none"
                 }`}
@@ -136,7 +149,9 @@ export default function Register() {
                     placeholder="Confirme sua senha"
                     value={confirmPassword}
                     onChange={(e) => setConfirmPassword(e.target.value)}
-                    className={`pl-10 h-12 text-base ${errors.confirmPassword ? "border-red-500" : ""}`}
+                    className={`pl-10 h-12 text-base ${
+                      errors.confirmPassword ? "border-red-500" : ""
+                    }`}
                   />
                   <button
                     type="button"
@@ -159,10 +174,7 @@ export default function Register() {
                   onChange={() => setAcceptTerms(!acceptTerms)}
                   id="terms"
                 />
-                <label
-                  htmlFor="terms"
-                  className="text-sm text-gray-700 cursor-pointer"
-                >
+                <label htmlFor="terms" className="text-sm text-gray-700 cursor-pointer">
                   Aceito todos os{" "}
                   <a
                     href="/termos-de-uso"
