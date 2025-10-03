@@ -27,5 +27,16 @@ export function useAlertSuccess() {
     });
   }
 
-  return { alertSuccessRegister, alertSuccessLogin};
+  function alertSuccessRecoverPassword() {
+    Swal.fire({
+      icon: "success",
+      title: "Senha recuperada com sucesso!",
+      text: "Redirecionando para login...",
+      showConfirmButton: false,
+      timer: 2000,
+    }).then(() => navigate("/login"));
+  }
+
+
+  return { alertSuccessRegister, alertSuccessLogin, alertSuccessRecoverPassword};
 }

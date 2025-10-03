@@ -1,4 +1,5 @@
 import Dashboard from '@/screens/app/Home';
+import TasksManager from '@/screens/app/ManagerTask';
 import LandingPage from '@/screens/Auth/Home';
 import Login from '@/screens/Auth/Login';
 import RecoverPassword from '@/screens/Auth/PasswordReset';
@@ -16,6 +17,7 @@ export function AppRoutes() {
                 <Route path='/register' element={<Register />} />
                 <Route path='/login' element={<Login />} />
                 <Route path='/dashboard' element={<Dashboard />} />
+                <Route path='/taskmanager' element={<TasksManager />} />
                 <Route path='/step1' element={<RecoverStep1 />} />
                 <Route path='/step2' element={<ResetPassword />} />
             </Routes>

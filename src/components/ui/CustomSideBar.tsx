@@ -3,10 +3,12 @@ import { cn } from "@/lib/utils";
 import { BarChart2, CheckSquare, Home, LogOut, Menu, X } from "lucide-react";
 import { useState } from "react";
 import { useLogout } from "@/hooks/useLogout";
+import { useNavigate } from "react-router-dom"; // 👈 IMPORTANTE
 
 export default function Sidebar() {
   const [open, setOpen] = useState(false);
   const handleLogout = useLogout();
+  const navigate = useNavigate(); // 👈 HOOK DO REACT ROUTER
 
   return (
     <aside
@@ -30,24 +32,51 @@ export default function Sidebar() {
       {/* Navegação */}
       <nav className="flex-1 mt-4">
         <ul className="space-y-2">
-          {[
-            { icon: <Home size={24} />, label: "Início" },
-            { icon: <CheckSquare size={24} />, label: "Tarefas" },
-            { icon: <BarChart2 size={24} />, label: "Relatórios" },
-          ].map(({ icon, label }, idx) => (
-            <li key={idx}>
-              <Button
-                variant="ghost"
-                className={cn(
-                  "w-full h-12 hover:bg-blue-800",
-                  open ? "justify-start pl-4" : "justify-center"
-                )}
-              >
-                <span className="text-blue-300 mr-2">{icon}</span>
-                {open && label}
-              </Button>
-            </li>
-          ))}
+          <li>
+            <Button
+              variant="ghost"
+              className={cn(
+                "w-full h-12 hover:bg-blue-800",
+                open ? "justify-start pl-4" : "justify-center"
+              )}
+              onClick={() => navigate("/dashboard")} // 👈 REDIRECIONA PARA "/"
+            >
+              <span className="text-blue-300 mr-2">
+                <Home size={24} />
+              </span>
+              {open && "Início"}
+            </Button>
+          </li>
+          <li>
+            <Button
+              variant="ghost"
+              className={cn(
+                "w-full h-12 hover:bg-blue-800",
+                open ? "justify-start pl-4" : "justify-center"
+              )}
+              onClick={() => navigate("/taskmanager")} // 👈 REDIRECIONA
+            >
+              <span className="text-blue-300 mr-2">
+                <CheckSquare size={24} />
+              </span>
+              {open && "Tarefas"}
+            </Button>
+          </li>
+          <li>
+            <Button
+              variant="ghost"
+              className={cn(
+                "w-full h-12 hover:bg-blue-800",
+                open ? "justify-start pl-4" : "justify-center"
+              )}
+              onClick={() => navigate("/reports")} // 👈 REDIRECIONA
+            >
+              <span className="text-blue-300 mr-2">
+                <BarChart2 size={24} />
+              </span>
+              {open && "Relatórios"}
+            </Button>
+          </li>
         </ul>
       </nav>
 

@@ -26,16 +26,17 @@ export default function VerifyCode() {
         icon: "success",
         title: "Código validado!",
         text: "Agora você pode redefinir sua senha.",
-        confirmButtonColor: "#14B8A6",
+        showConfirmButton: false,
+        timer: 2000,
       }).then(() => {
         navigate("/step2");
       });
-    }else {
+    } else {
       Swal.fire({
         icon: "error",
         title: "Código invalidado!",
-        confirmButtonColor: "#14B8A6"
-      })
+        confirmButtonColor: "#14B8A6",
+      });
     }
   };
 
@@ -84,15 +85,6 @@ export default function VerifyCode() {
               >
                 Verificar
               </Button>
-
-              <div className="flex justify-center">
-                <a
-                  onClick={() => navigate("/recoverpass")}
-                  className="text-sm text-teal-500 hover:text-teal-700 font-medium cursor-pointer"
-                >
-                  Voltar
-                </a>
-              </div>
             </CardContent>
           </form>
         </Card>

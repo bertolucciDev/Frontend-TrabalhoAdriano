@@ -9,7 +9,7 @@ import { useAlertSuccess } from "@/hooks/useSuccess";
 
 export default function ResetPassword() {
   const navigate = useNavigate();
-  const { alertSuccessRegister } = useAlertSuccess();
+  const { alertSuccessRecoverPassword } = useAlertSuccess();
 
   const [password, setPassword] = useState("");
   const [confirmPassword, setConfirmPassword] = useState("");
@@ -49,7 +49,7 @@ export default function ResetPassword() {
     if (Object.keys(newErrors).length > 0) return;
 
     // Sucesso
-    alertSuccessRegister();
+    alertSuccessRecoverPassword();
     navigate("/login");
   };
 

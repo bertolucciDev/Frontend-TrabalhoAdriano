@@ -26,7 +26,8 @@ export default function RecoverPassword() {
       icon: "success",
       title: "Email enviado!",
       text: "Verifique sua caixa de entrada para redefinir sua senha.",
-      confirmButtonColor: "#14B8A6",
+      showConfirmButton: false,
+      timer: 2000
     }).then(() => {
       navigate("/step1")
     })

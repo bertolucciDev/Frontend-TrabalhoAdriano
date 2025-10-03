@@ -3,10 +3,12 @@ import { useState } from "react";
 import { Button } from "@/components/ui/button";
 import { Home, CheckSquare, BarChart2, LogOut, Menu } from "lucide-react";
 import { useLogout } from "@/hooks/useLogout";
+import { useNavigate } from "react-router-dom";
 
 export default function CustomNavBarMobile() {
   const [open, setOpen] = useState(false); // menu colapsável
   const handleLogout = useLogout();
+  const navigate = useNavigate();
 
   return (
     <div className="lg:hidden fixed bottom-0 left-0 w-full bg-blue-900 text-white shadow-lg z-50">
@@ -31,18 +33,23 @@ export default function CustomNavBarMobile() {
           <Button
             variant="ghost"
             className="flex items-center justify-start w-full text-white"
+            onClick={() => navigate("/")}
           >
             <Home className="mr-2" size={20} /> Início
           </Button>
+
           <Button
             variant="ghost"
             className="flex items-center justify-start w-full text-white"
+            onClick={() => navigate("/taskmanager")}
           >
             <CheckSquare className="mr-2" size={20} /> Tarefas
           </Button>
+
           <Button
             variant="ghost"
             className="flex items-center justify-start w-full text-white"
+            onClick={() => navigate("/reports")}
           >
             <BarChart2 className="mr-2" size={20} /> Relatórios
           </Button>
