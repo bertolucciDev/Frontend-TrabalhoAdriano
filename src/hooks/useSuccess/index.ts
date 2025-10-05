@@ -3,7 +3,19 @@ import Swal from "sweetalert2";
 import { useNavigate } from "react-router-dom";
 
 export function useAlertSuccess() {
-  const navigate = useNavigate()
+  const navigate = useNavigate();
+
+  function alertSuccessRequestPassword() {
+    Swal.fire({
+      icon: "success",
+      title: "Email enviado!",
+      text: "Verifique sua caixa de entrada para redefinir sua senha.",
+      showConfirmButton: false,
+      timer: 2000,
+    }).then(() => {
+      navigate("/step1");
+    });
+  }
 
   function alertSuccessRegister() {
     Swal.fire({
@@ -37,6 +49,10 @@ export function useAlertSuccess() {
     }).then(() => navigate("/login"));
   }
 
-
-  return { alertSuccessRegister, alertSuccessLogin, alertSuccessRecoverPassword};
+  return {
+    alertSuccessRegister,
+    alertSuccessLogin,
+    alertSuccessRecoverPassword,
+    alertSuccessRequestPassword,
+  };
 }
