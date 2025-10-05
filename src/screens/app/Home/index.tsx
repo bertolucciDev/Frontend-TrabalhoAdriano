@@ -21,7 +21,7 @@ export default function Dashboard() {
       <main className="flex-1 bg-gray-200 p-4 sm:p-6 md:p-8 transition-all duration-300">
         {/* InfoCard */}
         <div className="bg-blue-900 w-full rounded-2xl shadow p-6 mb-8">
-          <InfoCard email="luis@gmail.com" rank="Ouro" tasksCompleted={25} />
+          <InfoCard name='Luis' email="luis@gmail.com" rank="Ouro" tasksCompleted={25} />
         </div>
 
         {/* Grid responsivo para gráficos e progresso */}

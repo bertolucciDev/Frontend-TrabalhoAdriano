@@ -1,0 +1,7 @@
+POST http://hostingfox.xyz:3000/auth/login
+Content-Type: application/json
+
+{
+  "email": "luis@gmail.com",
+  "password": "560065"
+}

@@ -3,9 +3,11 @@ import { Card, CardContent, CardHeader } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
 import { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
-import { User, Lock, Eye, EyeOff } from "lucide-react";
+import { User, Lock, Eye, EyeOff, Mail } from "lucide-react";
 import { useAlertWarning } from "@/hooks/useWarning";
 import { useAlertSuccess } from "@/hooks/useSuccess";
+import { createUserSchema } from "@/schemas/auth/create";
+import { register } from "@/services/auth/register";
 
 export default function Register() {
   const navigate = useNavigate();
@@ -13,6 +15,7 @@ export default function Register() {
   const { alertSuccessRegister } = useAlertSuccess();
 
   // States do formulário
+  const [name, setName] = useState("");
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [confirmPassword, setConfirmPassword] = useState("");
@@ -20,6 +23,7 @@ export default function Register() {
   const [showPassword, setShowPassword] = useState(false);
   const [showConfirmPassword, setShowConfirmPassword] = useState(false);
   const [errors, setErrors] = useState<{
+    name?: string;
     email?: string;
     password?: string;
     confirmPassword?: string;
@@ -34,46 +38,48 @@ export default function Register() {
   }, [password]);
 
   // Validação e registro
-  const handleRegister = (e: React.FormEvent) => {
+  const handleRegister = async (e: React.FormEvent) => {
     e.preventDefault();
+    setErrors({}); // limpa erros anteriores
 
-    const newErrors: {
-      email?: string;
-      password?: string;
-      confirmPassword?: string;
-    } = {};
+    try {
+      // Valida os dados com Zod
+      createUserSchema.parse({ name, email, password, confirmPassword });
 
-    // Valida email
-    if (!email.trim()) newErrors.email = "Campo obrigatório";
-    else if (!/\S+@\S+\.\S+/.test(email)) newErrors.email = "Email inválido";
+      // Verifica se aceitou os termos
+      if (!acceptTerms) {
+        alertWarningTerms();
+        return;
+      }
 
-    // Validação da senha
-    if (!password.trim()) newErrors.password = "Campo obrigatório";
-    else if (password.length < 6)
-      newErrors.password = "A senha deve ter pelo menos 6 caracteres";
+      // Chama o serviço de registro
+      await register({ data: { name, email, password } });
 
-    // Validação da confirmação somente se senha tiver >= 6 caracteres
-    if (password.length >= 6) {
-      if (!confirmPassword.trim()) newErrors.confirmPassword = "Campo obrigatório";
-      else if (password !== confirmPassword)
-        newErrors.confirmPassword = "Senhas não conferem";
+      // Mostra alerta de sucesso e redireciona
+      alertSuccessRegister();
+    } catch (err: any) {
+      // Trata erros do Zod
+      if (err.errors) {
+        const zodErrors: any = {};
+        err.errors.forEach((e: any) => {
+          if (e.path[0]) zodErrors[e.path[0]] = e.message;
+        });
+        setErrors(zodErrors);
+      }
+      // Trata erros retornados do backend
+      else if (err.response?.data?.message) {
+        setErrors({ email: err.response.data.message });
+      }
+      // Erro genérico
+      else {
+        setErrors({ email: "Erro ao registrar usuário." });
+      }
     }
-
-    setErrors(newErrors);
-    if (Object.keys(newErrors).length > 0) return;
-
-    // Valida aceite dos termos
-    if (!acceptTerms) {
-      alertWarningTerms();
-      return;
-    }
-
-    // Sucesso
-    alertSuccessRegister();
   };
 
+
   return (
-    <div className="flex h-screen">
+    <div className="flex h-dvh">
       {/* Coluna principal */}
       <div className="w-full md:w-1/2 flex items-center justify-center bg-gray-100">
         <Card className="w-full max-w-sm border-none shadow-none bg-gray-100">
@@ -83,20 +89,38 @@ export default function Register() {
 
           <form onSubmit={handleRegister}>
             <CardContent className="space-y-3">
-              {/* Campo Email */}
+              {/* Campo Nome */}
               <div className="relative flex flex-col">
                 <div className="relative flex items-center">
                   <span className="absolute left-3 text-gray-500">
                     <User size={18} />
                   </span>
                   <Input
+                    type="text"
+                    placeholder="Insira seu nome"
+                    value={name}
+                    onChange={(e) => setName(e.target.value)}
+                    className={`pl-10 h-12 text-base ${errors.name ? "border-red-500" : ""
+                      }`}
+                  />
+                </div>
+                {errors.email && (
+                  <span className="text-red-500 text-sm mt-1">{errors.name}</span>
+                )}
+              </div>
+              <div className="relative flex flex-col">
+                {/* Campo Email */}
+                <div className="relative flex items-center">
+                  <span className="absolute left-3 text-gray-500">
+                    <Mail size={18} />
+                  </span>
+                  <Input
                     type="email"
                     placeholder="Insira seu email"
                     value={email}
                     onChange={(e) => setEmail(e.target.value)}
-                    className={`pl-10 h-12 text-base ${
-                      errors.email ? "border-red-500" : ""
-                    }`}
+                    className={`pl-10 h-12 text-base ${errors.email ? "border-red-500" : ""
+                      }`}
                   />
                 </div>
                 {errors.email && (
@@ -115,9 +139,8 @@ export default function Register() {
                     placeholder="Insira sua senha"
                     value={password}
                     onChange={(e) => setPassword(e.target.value)}
-                    className={`pl-10 h-12 text-base ${
-                      errors.password ? "border-red-500" : ""
-                    }`}
+                    className={`pl-10 h-12 text-base ${errors.password ? "border-red-500" : ""
+                      }`}
                   />
                   <button
                     type="button"
@@ -134,11 +157,10 @@ export default function Register() {
 
               {/* Campo Confirmação de Senha com animação */}
               <div
-                className={`relative flex flex-col transition-all duration-300 ease-in-out mt-2 ${
-                  password.length >= 6
-                    ? "max-h-40 opacity-100"
-                    : "max-h-0 opacity-0 pointer-events-none"
-                }`}
+                className={`relative flex flex-col transition-all duration-300 ease-in-out mt-2 ${password.length >= 6
+                  ? "max-h-40 opacity-100"
+                  : "max-h-0 opacity-0 pointer-events-none"
+                  }`}
               >
                 <div className="relative flex items-center">
                   <span className="absolute left-3 text-gray-500">
@@ -149,9 +171,8 @@ export default function Register() {
                     placeholder="Confirme sua senha"
                     value={confirmPassword}
                     onChange={(e) => setConfirmPassword(e.target.value)}
-                    className={`pl-10 h-12 text-base ${
-                      errors.confirmPassword ? "border-red-500" : ""
-                    }`}
+                    className={`pl-10 h-12 text-base ${errors.confirmPassword ? "border-red-500" : ""
+                      }`}
                   />
                   <button
                     type="button"

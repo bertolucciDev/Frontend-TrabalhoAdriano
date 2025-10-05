@@ -17,6 +17,7 @@ export function useLogout() {
       cancelButtonText: "Cancelar",
     }).then((result) => {
       if (result.isConfirmed) {
+        localStorage.removeItem('token')
         navigate("/login");
       }
     });

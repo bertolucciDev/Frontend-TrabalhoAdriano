@@ -1,4 +1,5 @@
 export type InfoCardProps = {
+    name: string;
     email: string;
     rank: string;
     tasksCompleted: number;

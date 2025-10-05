@@ -5,6 +5,9 @@ import { useState } from "react";
 import { User, Lock, Eye, EyeOff } from "lucide-react";
 import { useAlertSuccess } from "@/hooks/useSuccess";
 import { useNavigate } from "react-router-dom";
+import { loginSchema } from "@/schemas/auth/login";
+import { login } from "@/services/auth/login";
+import ChatIaAgent from "@/components/chatIAgent";
 
 export default function Login() {
   const navigate = useNavigate();
@@ -18,20 +21,18 @@ export default function Login() {
     {}
   );
 
-  const handleLogin = (e: React.FormEvent) => {
+  const handleLogin = async (e: React.FormEvent) => {
     e.preventDefault();
+    setErrors({})
 
-    const newErrors: { email?: string; password?: string } = {};
-    if (!email.trim()) newErrors.email = "Campo obrigatório";
-    else if (!/\S+@\S+\.\S+/.test(email)) newErrors.email = "Email inválido";
-    if (!password.trim()) newErrors.password = "Campo obrigatório";
-
-    setErrors(newErrors);
-
-    if (Object.keys(newErrors).length > 0) return;
-
-    //Sucesso
-    alertSuccessLogin();
+    try {
+      loginSchema.parse({ email, password })
+      const { accessToken } = await login({ data: { email, password } });
+      localStorage.setItem('token', accessToken)
+      alertSuccessLogin()
+    } catch (e) {
+      console.log(e)
+    }
   };
 
   return (
@@ -56,18 +57,16 @@ export default function Login() {
                     value={email}
                     onChange={(e) => setEmail(e.target.value)}
                     placeholder="Insira seu email"
-                    className={`pl-10 h-12 text-base ${
-                      errors.email ? "border-red-500 fade-in-5" : ""
-                    }`}
+                    className={`pl-10 h-12 text-base ${errors.email ? "border-red-500 fade-in-5" : ""
+                      }`}
                   />
                 </div>
                 {errors.email && (
                   <span
-                    className={`text-red-500 text-sm mt-1 transition-all duration-300 ease-in-out transform ${
-                      errors.email
+                    className={`text-red-500 text-sm mt-1 transition-all duration-300 ease-in-out transform ${errors.email
                         ? "opacity-100 translate-y-0"
                         : "opacity-0 -translate-y-2"
-                    }`}
+                      }`}
                   >
                     {errors.email || "Campo oculto"}
                   </span>
@@ -86,9 +85,8 @@ export default function Login() {
                     value={password}
                     onChange={(e) => setPassword(e.target.value)}
                     placeholder="Insira sua senha"
-                    className={`pl-10 h-12 text-base ${
-                      errors.password ? "border-red-500" : ""
-                    }`}
+                    className={`pl-10 h-12 text-base ${errors.password ? "border-red-500" : ""
+                      }`}
                   />
                   <button
                     type="button"
@@ -100,11 +98,10 @@ export default function Login() {
                 </div>
                 {errors.password && (
                   <span
-                    className={`text-red-500 text-sm mt-1 transition-all duration-300 ease-in-out ${
-                      errors.password
+                    className={`text-red-500 text-sm mt-1 transition-all duration-300 ease-in-out ${errors.password
                         ? "opacity-100 translate-y-0"
                         : "opacity-0 -translate-y-2"
-                    }`}
+                      }`}
                   >
                     {errors.password || "Campo oculto"}
                   </span>
@@ -151,6 +148,7 @@ export default function Login() {
             "linear-gradient(to bottom, rgba(18,48,115,0.772), #2563eb)",
         }}
       />
+      <ChatIaAgent />
     </div>
   );
 }
