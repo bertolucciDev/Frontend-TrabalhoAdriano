@@ -1,9 +1,11 @@
 import { useNavigate } from "react-router-dom";
-
+import { useContext } from "react";
 import Swal from "sweetalert2";
+import { AuthContext } from "@/contexts/AuthContext";
 
 export function useLogout() {
   const navigate = useNavigate();
+  const { logout } = useContext(AuthContext); // pega a função do contexto
 
   const handleLogout = () => {
     Swal.fire({
@@ -17,7 +19,15 @@ export function useLogout() {
       cancelButtonText: "Cancelar",
     }).then((result) => {
       if (result.isConfirmed) {
-        localStorage.removeItem('token')
+        // limpa localStorage
+        localStorage.removeItem("accessToken");
+        localStorage.removeItem("refreshToken");
+        localStorage.removeItem("user");
+
+        // limpa contexto
+        logout();
+
+        // redireciona para login
         navigate("/login");
       }
     });

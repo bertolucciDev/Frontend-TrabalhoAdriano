@@ -1,37 +1,57 @@
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
-import { useState } from "react";
+import { useContext, useState } from "react";
 import { User, Lock, Eye, EyeOff } from "lucide-react";
 import { useAlertSuccess } from "@/hooks/useSuccess";
 import { useNavigate } from "react-router-dom";
 import { loginSchema } from "@/schemas/auth/login";
-import { login } from "@/services/auth/login";
 import ChatIaAgent from "@/components/chatIAgent";
+import { AuthContext } from "@/contexts/AuthContext";
 
 export default function Login() {
   const navigate = useNavigate();
   const { alertSuccessLogin } = useAlertSuccess();
+  const { login } = useContext(AuthContext)
 
-  //States
+  // States
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [showPassword, setShowPassword] = useState(false);
-  const [errors, setErrors] = useState<{ email?: string; password?: string }>(
-    {}
-  );
+  const [errors, setErrors] = useState<{ email?: string; password?: string }>({});
 
   const handleLogin = async (e: React.FormEvent) => {
     e.preventDefault();
-    setErrors({})
+    setErrors({});
 
     try {
-      loginSchema.parse({ email, password })
-      const { accessToken } = await login({ data: { email, password } });
-      localStorage.setItem('token', accessToken)
-      alertSuccessLogin()
-    } catch (e) {
-      console.log(e)
+      // Validação Zod
+      loginSchema.parse({ email, password });
+
+      // Login real pelo AuthContext
+      await login( email, password );
+
+      // Sucesso
+      alertSuccessLogin();
+    } catch (e: any) {
+      console.log(e);
+
+      // Erros do Zod
+      if (e.errors) {
+        const formErrors: any = {};
+        e.errors.forEach((err: any) => {
+          formErrors[err.path[0]] = err.message;
+        });
+        setErrors(formErrors);
+      } 
+      // Erro do backend
+      else if (e.response?.data?.message) {
+        setErrors({ email: e.response.data.message });
+      } 
+      // Erro genérico
+      else {
+        setErrors({ email: "Erro ao tentar logar" });
+      }
     }
   };
 
@@ -57,16 +77,12 @@ export default function Login() {
                     value={email}
                     onChange={(e) => setEmail(e.target.value)}
                     placeholder="Insira seu email"
-                    className={`pl-10 h-12 text-base ${errors.email ? "border-red-500 fade-in-5" : ""
-                      }`}
+                    className={`pl-10 h-12 text-base ${errors.email ? "border-red-500 fade-in-5" : ""}`}
                   />
                 </div>
                 {errors.email && (
                   <span
-                    className={`text-red-500 text-sm mt-1 transition-all duration-300 ease-in-out transform ${errors.email
-                        ? "opacity-100 translate-y-0"
-                        : "opacity-0 -translate-y-2"
-                      }`}
+                    className={`text-red-500 text-sm mt-1 transition-all duration-300 ease-in-out transform ${errors.email ? "opacity-100 translate-y-0" : "opacity-0 -translate-y-2"}`}
                   >
                     {errors.email || "Campo oculto"}
                   </span>
@@ -85,8 +101,7 @@ export default function Login() {
                     value={password}
                     onChange={(e) => setPassword(e.target.value)}
                     placeholder="Insira sua senha"
-                    className={`pl-10 h-12 text-base ${errors.password ? "border-red-500" : ""
-                      }`}
+                    className={`pl-10 h-12 text-base ${errors.password ? "border-red-500" : ""}`}
                   />
                   <button
                     type="button"
@@ -98,10 +113,7 @@ export default function Login() {
                 </div>
                 {errors.password && (
                   <span
-                    className={`text-red-500 text-sm mt-1 transition-all duration-300 ease-in-out ${errors.password
-                        ? "opacity-100 translate-y-0"
-                        : "opacity-0 -translate-y-2"
-                      }`}
+                    className={`text-red-500 text-sm mt-1 transition-all duration-300 ease-in-out ${errors.password ? "opacity-100 translate-y-0" : "opacity-0 -translate-y-2"}`}
                   >
                     {errors.password || "Campo oculto"}
                   </span>

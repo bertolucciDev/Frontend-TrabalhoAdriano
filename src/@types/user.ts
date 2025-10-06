@@ -6,5 +6,7 @@ export interface User {
   email: string;
   password: string;
   role: UserRole;
+  accessToken: string;
+  refreshToken: string;
   isVerified: boolean
 }

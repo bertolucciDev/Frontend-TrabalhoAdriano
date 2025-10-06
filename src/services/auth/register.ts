@@ -1,24 +1,21 @@
-import api from "../api";
-
-import type { User } from "@/@types/user";
+import api from "@/services/api";
 
 type RegisterData = {
-  name: string,
-  email: string,
-  password: string
-  // confirmPassword: string
-}
+  name: string;
+  email: string;
+  password: string;
+  confirmPassword: string;
+};
 
 interface RegisterProps {
-  data: RegisterData
+  data: RegisterData;
 }
 
 interface RegisterReturn {
-  message: string
-  user: User
+  message: string;
 }
 
-export const register = async ({ data }: RegisterProps): Promise<RegisterReturn> => {
-  const { data: response } = await api.post('/auth/register', data);
-  return response;
-}
+export const register = async ({ data: registerData }: RegisterProps): Promise<RegisterReturn> => {
+  const { data } = await api.post("/auth/register", { ...registerData });
+  return data;
+};
